@@ -1,0 +1,17 @@
+#!/bin/bash
+
+echo "Stopping Hotspot..."
+sudo systemctl stop dnsmasq
+sudo systemctl stop hostapd
+
+echo "Stopping VPN..."
+sudo systemctl stop wg-quick@wg0
+
+echo "Flushing iptables rules..."
+sudo iptables -F
+sudo iptables -t nat -F
+
+echo "Disabling IP forwarding..."
+sudo sysctl -w net.ipv4.ip_forward=0
+
+echo "Hotspot and VPN stopped."

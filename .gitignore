@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+dist/
+build/
+
+# Virtualenvs
+venv/
+.venv/
+
+
+# Environment files
+
+# Logs
+
+# Editors / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS cruft
+.DS_Store
+Thumbs.db
+.git.forpersonal
+.git.forgithub
+.gitignore.github
+.gitignore.personal
+
+.env
+PTPCFORTV.conf
+*.conf

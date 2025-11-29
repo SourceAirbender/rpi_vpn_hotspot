@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Western Air Temple – Hotspot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --air-bg: #020617;
+      --air-shell: rgba(15, 23, 42, 0.92);
+      --air-shell-border: rgba(148, 163, 184, 0.45);
+      --air-ink: #e5e7eb;
+      --air-muted: #9ca3af;
+      --air-card-bg: rgba(15, 23, 42, 0.96);
+      --air-card-border: rgba(51, 65, 85, 0.9);
+      --air-shadow-soft: 0 26px 60px rgba(15, 23, 42, 0.85);
+      --radius-md: 14px;
+      --radius-2xl: 26px;
+      --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--air-ink);
+      background-color: var(--air-bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Background image + overlays */
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at top, rgba(15, 23, 42, 0.1), rgba(15, 23, 42, 0.9)),
+        url("img/Site-background-light.webp") center top / cover no-repeat;
+      filter: saturate(1.1);
+      opacity: 0.48;
+      z-index: -2;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.35), transparent 55%),
+        radial-gradient(circle at 80% 80%, rgba(251, 191, 36, 0.35), transparent 55%);
+      mix-blend-mode: screen;
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .page-shell {
+      flex: 1;
+      max-width: 640px;
+      margin: 18px auto 24px;
+      padding: 0 14px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* Hero */
+
+    header.hero {
+      position: relative;
+      border-radius: var(--radius-2xl);
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.98));
+      box-shadow: var(--air-shadow-soft);
+      isolation: isolate;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.3)),
+        url("img/Site-background-light.webp") center / cover no-repeat;
+      opacity: 0.55;
+      transform: scale(1.1);
+      filter: blur(3px);
+      transition: transform 8s ease-out, opacity 0.6s ease-out;
+      will-change: transform;
+      z-index: -2;
+    }
+
+    header.hero:hover .hero-bg {
+      transform: scale(1.03);
+      opacity: 0.7;
+    }
+
+    .hero-inner {
+      position: relative;
+      padding: 18px 18px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      align-items: center;
+      justify-content: space-between;
+      color: #e5e7eb;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .hero-title-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-orb {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      border: 2px solid rgba(248, 250, 252, 0.9);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 30% 0, #7dd3fc, #0ea5e9);
+      box-shadow:
+        0 0 0 4px rgba(14, 165, 233, 0.22),
+        0 12px 30px rgba(15, 23, 42, 0.78);
+      overflow: hidden;
+    }
+
+    .hero-orb-img {
+      width: 80%;
+      height: 80%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .hero-title-block h1 {
+      margin: 0;
+      font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .hero-title-block h1 span.main {
+      opacity: 0.9;
+    }
+
+    .hero-title-block h1 span.sub {
+      font-size: 0.8em;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.75);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.7));
+      text-transform: none;
+      letter-spacing: 0.12em;
+    }
+
+    .hero-title-block p {
+      margin: 6px 0 0;
+      max-width: 420px;
+      font-size: 0.9rem;
+      color: rgba(226, 232, 240, 0.9);
+    }
+
+    .hero-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .hero-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.7);
+    }
+
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      margin-left: auto;
+    }
+
+    .hero-mini-status {
+      font-size: 0.75rem;
+      color: rgba(203, 213, 225, 0.95);
+      text-align: right;
+    }
+
+    .hero-mini-status div + div {
+      margin-top: 3px;
+    }
+
+    .hero-mini-status span.badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      margin-left: 4px;
+      font-size: 0.74rem;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #6b7280;
+      box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.7);
+      transition: background 0.18s ease-out, box-shadow 0.18s ease-out;
+    }
+
+    .badge-dot.ok {
+      background: #22c55e;
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.9);
+    }
+
+    .badge-dot.warn {
+      background: #facc15;
+      box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.9);
+    }
+
+    .badge-dot.bad {
+      background: #ef4444;
+      box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.9);
+    }
+
+    /* Panel */
+
+    .glass-panel {
+      background: var(--air-shell);
+      border-radius: var(--radius-2xl);
+      border: 1px solid var(--air-shell-border);
+      box-shadow: var(--air-shadow-soft);
+      padding: 16px 16px 14px;
+      backdrop-filter: blur(18px);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .panel-header h2 {
+      margin: 0;
+      font-size: 1rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #cbd5f5;
+    }
+
+    .panel-header small {
+      display: block;
+      color: var(--air-muted);
+      font-size: 0.78rem;
+      margin-top: 3px;
+    }
+
+    .pill-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.7));
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      white-space: nowrap;
+    }
+
+    .pill-tag-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #0ea5e9;
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.9);
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, #020617, #020617);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--air-card-border);
+      padding: 12px 13px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -30%;
+      background:
+        radial-gradient(circle at top right, rgba(56, 189, 248, 0.16), transparent 65%),
+        radial-gradient(circle at bottom left, rgba(251, 191, 36, 0.15), transparent 65%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .main-status-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .main-status-header h3 {
+      margin: 0;
+      font-size: 0.9rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #6b7280;
+      box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.9);
+      transition: background 0.18s ease-out, box-shadow 0.18s ease-out;
+    }
+
+    .status-dot.ok {
+      background: #22c55e;
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.9);
+    }
+
+    .status-dot.warn {
+      background: #fbbf24;
+      box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.9);
+    }
+
+    .status-dot.bad {
+      background: #ef4444;
+      box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.9);
+    }
+
+    .main-status-body {
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .main-status-body p {
+      margin: 4px 0;
+      color: #d1d5db;
+    }
+
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: baseline;
+      font-size: 0.8rem;
+    }
+
+    .metric-label {
+      color: #9ca3af;
+    }
+
+    .metric-value {
+      font-weight: 500;
+      text-align: right;
+    }
+
+    /* Buttons */
+
+    .actions {
+      margin-top: 14px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button.btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      padding: 8px 16px;
+      font-size: 0.86rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 7px 20px rgba(15, 23, 42, 0.55);
+      transition:
+        transform 0.12s ease-out,
+        box-shadow 0.12s ease-out,
+        filter 0.12s ease-out,
+        background var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    button.btn.start {
+      background: radial-gradient(circle at top, #fefce8, #fde68a);
+      color: #7c2d12;
+      box-shadow: 0 7px 20px rgba(180, 83, 9, 0.55);
+    }
+
+    button.btn.stop {
+      background: radial-gradient(circle at top, #fee2e2, #fecaca);
+      color: #7f1d1d;
+      border-color: rgba(239, 68, 68, 0.95);
+      box-shadow: 0 7px 20px rgba(248, 113, 113, 0.65);
+    }
+
+    button.btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 9px 26px rgba(15, 23, 42, 0.85);
+      filter: brightness(1.03);
+    }
+
+    button.btn:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.75);
+      filter: brightness(0.98);
+    }
+
+    button.btn:disabled {
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .message-bar {
+      margin-top: 8px;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .message-bar span.status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .message-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.9);
+      transition: background 0.18s ease-out, box-shadow 0.18s ease-out;
+    }
+
+    .message-dot.error {
+      background: #ef4444;
+      box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.95);
+    }
+
+    footer {
+      max-width: 640px;
+      margin: 0 auto 12px;
+      padding: 0 14px;
+      font-size: 0.72rem;
+      color: #64748b;
+      text-align: right;
+      opacity: 0.9;
+    }
+
+    footer span {
+      opacity: 0.85;
+    }
+
+    @media (max-width: 720px) {
+      .page-shell {
+        padding: 0 10px 18px;
+        gap: 14px;
+      }
+
+      .hero-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-right {
+        align-items: flex-start;
+        width: 100%;
+      }
+
+      .hero-mini-status {
+        text-align: left;
+        width: 100%;
+      }
+
+      .glass-panel {
+        padding: 14px 12px 12px;
+      }
+
+      .panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-inner">
+        <div class="hero-left">
+          <div class="hero-title-row">
+            <div class="hero-orb">
+              <img src="img/Avatar_arrow.png" alt="Avatar Arrow" class="hero-orb-img" />
+            </div>
+            <div class="hero-title-block">
+              <h1>
+                <span class="main">Western Air Temple</span>
+                <span class="sub">VPN Hotspot</span>
+              </h1>
+              <p>
+                Simple dashboard for the Pi's WireGuard-backed Wi-Fi hotspot.
+                Check status at a glance and bend the tunnel on or off with a single tap.
+              </p>
+            </div>
+          </div>
+
+          <div class="hero-pills">
+            <div class="hero-pill">
+              <span class="hero-pill-dot"></span>
+              WireGuard &bull; PiVPN
+            </div>
+            <div class="hero-pill">
+              <span class="hero-pill-dot"></span>
+              Termux-controlled
+            </div>
+            <div class="hero-pill">
+              <span class="hero-pill-dot"></span>
+              Discord Webhook
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div class="hero-mini-status">
+            <div>
+              Last refresh:
+              <span id="hero-last-refresh">never</span>
+            </div>
+            <div>
+              Overall:
+              <span class="badge">
+                <span class="badge-dot" id="hero-status-dot"></span>
+                <span id="hero-status-text">unknown</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="glass-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Hotspot Status</h2>
+            <small>
+              WireGuard interface + Wi-Fi AP running on your Raspberry Pi.
+            </small>
+          </div>
+          <div class="pill-tag">
+            <span class="pill-tag-dot"></span>
+            Pi Zero &bull; Air Nomad Mode
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-inner">
+            <div class="main-status-header">
+              <h3>VPN &amp; Hotspot</h3>
+              <div class="status-pill">
+                <span class="status-dot" id="overall-status-dot"></span>
+                <span id="overall-status-text">Unknown</span>
+              </div>
+            </div>
+            <div class="main-status-body">
+              <p id="overall-detail">Waiting for first update...</p>
+              <div class="metric-row">
+                <span class="metric-label">VPN interface</span>
+                <span class="metric-value" id="vpn-if">–</span>
+              </div>
+              <div class="metric-row">
+                <span class="metric-label">VPN local IP</span>
+                <span class="metric-value" id="vpn-ip">–</span>
+              </div>
+              <div class="metric-row">
+                <span class="metric-label">VPN WAN IP</span>
+                <span class="metric-value" id="vpn-wan-ip">–</span>
+              </div>
+              <div class="metric-row">
+                <span class="metric-label">Hotspot interface</span>
+                <span class="metric-value" id="hotspot-if">–</span>
+              </div>
+              <div class="metric-row">
+                <span class="metric-label">Hotspot IPv4</span>
+                <span class="metric-value" id="hotspot-ip">–</span>
+              </div>
+              <div class="metric-row">
+                <span class="metric-label">LAN WAN IP</span>
+                <span class="metric-value" id="lan-wan-ip">–</span>
+              </div>
+              <div class="metric-row">
+                <span class="metric-label">Systemd unit</span>
+                <span class="metric-value" id="svc-unit">–</span>
+              </div>
+              <div class="metric-row">
+                <span class="metric-label">Unit state</span>
+                <span class="metric-value" id="svc-state">–</span>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btn start" id="start-btn" type="button">
+                Start Hotspot
+              </button>
+              <button class="btn stop" id="stop-btn" type="button">
+                Stop Hotspot
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="message-bar">
+          <span class="status">
+            <span class="message-dot" id="message-dot"></span>
+            <span id="message-text">Ready.</span>
+          </span>
+          <span class="tiny">
+            Auto-refresh every ~7s.
+          </span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+<!--
+  <footer>
+    <span>Western Air Temple - Pi VPN Hotspot Manager</span>
+  </footer>
+-->
+  <script>
+    const heroLastRefresh = document.getElementById("hero-last-refresh");
+    const heroStatusDot = document.getElementById("hero-status-dot");
+    const heroStatusText = document.getElementById("hero-status-text");
+
+    const overallDot = document.getElementById("overall-status-dot");
+    const overallText = document.getElementById("overall-status-text");
+    const overallDetail = document.getElementById("overall-detail");
+
+    const vpnIf = document.getElementById("vpn-if");
+    const vpnIp = document.getElementById("vpn-ip");
+    const vpnWanIp = document.getElementById("vpn-wan-ip");
+    const hotspotIf = document.getElementById("hotspot-if");
+    const hotspotIp = document.getElementById("hotspot-ip");
+    const lanWanIp = document.getElementById("lan-wan-ip");
+    const svcUnit = document.getElementById("svc-unit");
+    const svcState = document.getElementById("svc-state");
+
+    const startBtn = document.getElementById("start-btn");
+    const stopBtn = document.getElementById("stop-btn");
+
+    const msgDot = document.getElementById("message-dot");
+    const msgText = document.getElementById("message-text");
+
+    let lastOverallState = null;
+    let isBusy = false;
+
+    function setMessage(text, isError = false) {
+      msgText.textContent = text;
+      msgDot.classList.toggle("error", !!isError);
+    }
+
+    function setDot(el, state) {
+      el.classList.remove("ok", "warn", "bad");
+      if (state) el.classList.add(state);
+    }
+
+    function shortTime(ts) {
+      if (!ts) return "never";
+      const d = new Date(ts * 1000);
+      return d.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
+    }
+
+    async function apiGet(path) {
+      const res = await fetch(path, { cache: "no-store" });
+      if (!res.ok) throw new Error(`GET ${path} -> ${res.status}`);
+      return res.json();
+    }
+
+    async function apiPost(path, body) {
+      const res = await fetch(path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body || {}),
+      });
+      if (!res.ok) {
+        let msg = `POST ${path} -> ${res.status}`;
+        try {
+          const j = await res.json();
+          if (j.error) msg += ` (${j.error})`;
+        } catch (_) {}
+        throw new Error(msg);
+      }
+      return res.json();
+    }
+
+    function refreshUI(data) {
+      const ts = data.timestamp || Date.now() / 1000;
+      heroLastRefresh.textContent = shortTime(ts);
+
+      const vpn = data.vpn || {};
+      const hotspot = data.hotspot || {};
+      const lan = data.lan || {};
+      const svc = data.service || {};
+      const overallState = data.overall_state || "off";
+
+      vpnIf.textContent = vpn.interface || "–";
+      vpnIp.textContent = vpn.ip4 || "–";
+      vpnWanIp.textContent = vpn.wan_ip || "–";
+      hotspotIf.textContent = hotspot.interface || "–";
+      hotspotIp.textContent = hotspot.ip4 || "–";
+      lanWanIp.textContent = lan.wan_ip || "–";
+      svcUnit.textContent = svc.unit || "–";
+      svcState.textContent = svc.active_state
+        ? `${svc.active_state}/${svc.sub_state || "-"}`
+        : "unknown";
+
+      let stateText = "Unknown";
+      let detailText = "";
+      let dotState = "bad";
+
+      if (overallState === "off") {
+        stateText = "Off";
+        detailText = "VPN tunnel and hotspot are both down.";
+        dotState = "bad";
+      } else if (overallState === "on") {
+        stateText = "Connected";
+        detailText = "WireGuard and hotspot are both up.";
+        dotState = "ok";
+      } else {
+        stateText = "Partial";
+        detailText = "Service is active, but not all components are fully up yet.";
+        dotState = "warn";
+      }
+
+      overallText.textContent = stateText;
+      overallDetail.textContent = detailText;
+      setDot(overallDot, dotState);
+
+      heroStatusText.textContent = stateText;
+      setDot(heroStatusDot, dotState === "ok" ? "ok" : dotState === "warn" ? "warn" : "bad");
+
+      lastOverallState = overallState;
+
+      // Enable / disable buttons based on state
+      if (overallState === "on") {
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+      } else if (overallState === "off") {
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+      } else {
+        // partial - allow both
+        startBtn.disabled = false;
+        stopBtn.disabled = false;
+      }
+    }
+
+    async function refreshStatus() {
+      try {
+        const data = await apiGet("/api/status");
+        refreshUI(data);
+        setMessage("Status updated.");
+      } catch (err) {
+        console.error(err);
+        setMessage("Failed to refresh status: " + err.message, true);
+      }
+    }
+
+    async function runAction(action) {
+      if (isBusy) return;
+      isBusy = true;
+      startBtn.disabled = true;
+      stopBtn.disabled = true;
+      setMessage(`Running ${action}...`);
+
+      try {
+        const data = await apiPost("/api/run", { action });
+        if (!data.ok) {
+          const errText = data.error || data.stderr || "unknown error";
+          throw new Error(errText);
+        }
+        const status = data.status || {};
+        refreshUI(status);
+        setMessage(
+          action === "start" ? "Hotspot start script completed." : "Hotspot stop script completed."
+        );
+      } catch (err) {
+        console.error(err);
+        setMessage("Action failed: " + err.message, true);
+      } finally {
+        isBusy = false;
+      }
+    }
+
+    startBtn.addEventListener("click", () => runAction("start"));
+    stopBtn.addEventListener("click", () => runAction("stop"));
+
+    // Initial load + polling
+    refreshStatus();
+    setInterval(refreshStatus, 7000);
+  </script>
+</body>
+</html>
