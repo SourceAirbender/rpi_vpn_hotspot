@@ -28,9 +28,3 @@ Install via `apt` if needed:
 - `systemd` (standard on Raspberry Pi OS)
 - `python3`, `python3-venv`, `python3-pip`
 - `iputils-ping`
-
-replaces:
-http://192.168.1.77:3000/tuello/toggable_pi_vpn_us
-
-github:
-https://github.com/SourceAirbender/rpi_vpn_hotspot
